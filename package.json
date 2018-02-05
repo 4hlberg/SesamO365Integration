@@ -1,0 +1,50 @@
+{
+  "name": "O365Integration",
+  "version": "1.0.0",
+  "description": "REST Microservice O365",
+  "main": "Server.js",
+  "dependencies": {
+    "@microsoft/microsoft-graph-client": "^1.0.0",
+    "@types/express": "^4.11.0",
+    "@types/mocha": "^2.2.43",
+    "base-64": "^0.1.0",
+    "body-parser": "^1.18.2",
+    "cookie-parser": "^1.4.3",
+    "csv-write-stream": "^2.0.0",
+    "errorhandler": "^1.5.0",
+    "express": "^4.16.2",
+    "filereader": "^0.10.3",
+    "fs": "0.0.1-security",
+    "method-override": "^2.3.10",
+    "morgan": "^1.9.0",
+    "q": "^1.5.1",
+    "request": "^2.83.0",
+    "request-promise": "^4.2.2",
+    "tslint": "^5.7.0",
+    "typescript-eslint-parser": "^8.0.1"
+  },
+  "devDependencies": {
+    "@types/body-parser": "^1.16.8",
+    "@types/mocha": "^2.2.43",
+    "@types/node": "^8.0.46",
+    "eslint-plugin-react": "^7.4.0",
+    "nodemon": "^1.12.1",
+    "supertest": "^3.0.0",
+    "ts-node": "^3.3.0",
+    "typescript": "^2.5.3"
+  },
+  "scripts": {
+    "build": "tsc",
+    "debug": "nodemon --watch ./dist --inspect=0.0.0.0:9222 --nolazy ./dist/Server.js",
+    "dev": "npm run build:live",
+    "start": "node ./dist/Server.js",
+    "build:live": "nodemon --exec ./node_modules/.bin/ts-node -- ./src/Server.ts"
+  },
+  "keywords": [
+    "api",
+    "nodejs",
+    "express"
+  ],
+  "author": "trond.tufte@bouvet.no",
+  "license": ""
+}
