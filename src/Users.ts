@@ -13,13 +13,13 @@ export class Users {
   public instance: GraphClient.GraphClient;
 
 
-
   constructor() {
     this.userStatusArray = [];
     this.instance = GraphClient.GraphClient.getInstance();
   }
 
 
+ //Getting user-status based on mail-settings. E.g. user is in meeting.
   public userStatus(response, request): void {
     this.client = this.instance.getClient();
     if (request.method === "POST") {
@@ -109,10 +109,11 @@ export class Users {
     }
   }
 
-
+  //Retrieves a list of users from O365
   public users(response, request): void {
     this.client = this.instance.getClient();
 
+    //Post is currently not in use as AD is overwriting post-request regarding user profile update
     if (request.method === "POST") {
       let userId: any = request.data;
       this.client.api("/users/" + userId + "/displayName")
@@ -146,7 +147,7 @@ export class Users {
     }
   }
 
-
+  // Paging is used when the amount of instances is high. Thus getNextpage is necessary 
   public static getNextPage(result: any, response: any, client: any, data: any): void {
     let completeResult: any[] = data;
     completeResult = data.concat(result.value);
@@ -171,6 +172,7 @@ export class Users {
     }
   }
 
+  //Updates profile pictures in O365 with base64 encoded images from CV-Partner
   public updateProfilePictureBaseEncoded(response: any, request: any): void {
     this.client = this.instance.getClient();
 
@@ -182,12 +184,13 @@ export class Users {
         return;
       }
 
+      //Test data consists of an array with objects. Each object has o365_userId and the actual encoded image from CV-Partner
       data.forEach((element) => {
         let userId: any = element["o365_userId"];
         let image: string = element["image"]
         let bitmap = new Buffer(image, 'base64');
 
-        if (image.length === 0) {
+        if (image.length === 0) { 
           response.end("No image");
           return;
 

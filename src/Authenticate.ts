@@ -20,7 +20,7 @@ export class Authenticate {
         //Refreshing token every 1.5 hrs
         setInterval(() => {
             Authenticate.refreshToken();
-        }, 60 * 60 * 1500)
+        }, 60 * 60 * 1000)
 
     }
 

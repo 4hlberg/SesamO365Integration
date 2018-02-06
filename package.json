@@ -1,5 +1,5 @@
 {
-  "name": "O365Integration",
+  "name": "SesamO365Integration",
   "version": "1.0.0",
   "description": "REST Microservice O365",
   "main": "Server.js",
@@ -38,7 +38,8 @@
     "debug": "nodemon --watch ./dist --inspect=0.0.0.0:9222 --nolazy ./dist/Server.js",
     "dev": "npm run build:live",
     "start": "node ./dist/Server.js",
-    "build:live": "nodemon --exec ./node_modules/.bin/ts-node -- ./src/Server.ts"
+    "build:live": "nodemon --exec ./node_modules/.bin/ts-node -- ./src/Server.ts",
+    "docker-debug": "docker-compose up"
   },
   "keywords": [
     "api",
