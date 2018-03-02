@@ -1,5 +1,11 @@
 ## Node.js application written in TypeScript
 
+### Install 
+
+```bash
+npm install
+```
+
 ### Build 
 
 ```bash
