@@ -27,7 +27,7 @@ npm start
 ### Sesam 
 
 ```bash
-The application requires the user to be Registered in Azure AD in order to ble able to access the data in the tenant.
+The application requires the user/application to be Registered in Azure AD in order to ble able to access the data in the tenant.
 After registration you will be provided with clientID and a secret that enables you to be authenticated.
 
 For registration of application:
