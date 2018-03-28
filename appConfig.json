@@ -1,0 +1,7 @@
+{
+    "Port": 8000,
+    "ClientId": "b2e9e676-4110-4340-ae4c-21742e848f3d",
+    "TokenEndPoint": "https://login.windows.net/c317fa72-b393-44ea-a87c-ea272e8d963d/oauth2/token",
+    "Resource": "https://graph.microsoft.com"
+
+}

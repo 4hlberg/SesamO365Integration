@@ -45,33 +45,32 @@ class App {
     let router: any = express.Router();
   
     router.all("/industry", bodyParser.json(), (req, res, next) => {
-      console.log(req.method + "/industry")
+      console.log(req.method + " /industry");
       this.file.updateIndustryList(res, req);
     });
 
     router.all("/groups", (req, res, next) => {
-      console.log(req.method + "/groups")
+      console.log(req.method + " /groups");
       this.group.groups(res, req);
     });
 
     router.all("/users", (req, res, next) => {
-      console.log(req.method + "/users")
+      console.log(req.method + " /users");
       this.usr.users(res, req);
     });
 
     router.all("/status", (req, res, next) => {
-      console.log(req.method + "/status")
+      console.log(req.method + " /status");
       this.usr.userStatus(res, req);
     });
 
     router.all("/photo", (req, res, next) => {
-      console.log(req.method + "/photo")
+      console.log(req.method + " /photo");
       this.usr.updateProfilePictureBaseEncoded(res, req);
-      //this.usr.updateProfilePicture(res, req);
     });
 
     router.all("/file", (req, res, next) => {
-      console.log(req.method + "/file")
+      console.log(req.method + " /file");
       this.file.shareFile(res, req);
     });
 

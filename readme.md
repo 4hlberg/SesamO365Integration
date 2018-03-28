@@ -1,4 +1,4 @@
-## Node.js application written in TypeScript
+## Node.js microservice written in TypeScript
 
 ### Install 
 
@@ -23,6 +23,13 @@ npm run dev
 ```bash
 npm start
 ```
+### API Endpoints
+
+/users GET -> Retrieves a list of all users in O365
+/groups GET -> Retrieves a list of all groups in O365
+/photo POST -> Updates a user's image given base64 encoded image and O365 user id in the request body
+/status POST -> By posting userId's, the users statuses are retrieved
+/status GET -> The users statuses retrived from the post is returned
 
 ### Sesam 
 
@@ -63,7 +70,7 @@ Example of a Sesam pipe for retrieving all users
 }
 
 
-Example of System in Sesam
+Example of O365 system config in Sesam
 
 {
   "_id": "O365",

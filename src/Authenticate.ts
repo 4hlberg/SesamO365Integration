@@ -3,6 +3,7 @@ import * as Q from "q";
 import * as rp from "request-promise";
 import { resolve } from "dns";
 
+var config: any = require("../appConfig.json");
 
 export class Authenticate {
 
@@ -13,14 +14,14 @@ export class Authenticate {
     public static token: string;
 
     constructor() {
-        Authenticate.tokenEndpoint = "https://login.windows.net/c317fa72-b393-44ea-a87c-ea272e8d963d/oauth2/token";
-        Authenticate.clientId = "b2e9e676-4110-4340-ae4c-21742e848f3d";
+        Authenticate.tokenEndpoint = config.TokenEndPoint;
+        Authenticate.clientId =config.ClientId;
         Authenticate.clientSecret = process.env.Token_Node_Office;
         Authenticate.auth = {};
-        //Refreshing token every 1.5 hrs
+        //Refreshing token every 1 hrs
         setInterval(() => {
             Authenticate.refreshToken();
-        }, 60 * 60 * 1000)
+        }, 60 * 60 * 1000);
 
     }
 
@@ -32,7 +33,7 @@ export class Authenticate {
             grant_type: "client_credentials",
             client_id: Authenticate.clientId,
             client_secret: Authenticate.clientSecret,
-            resource: "https://graph.microsoft.com"
+            resource: config.Resource
         };
 
         // make a request to the token issuing endpoint.
@@ -62,7 +63,8 @@ export class Authenticate {
                 Authenticate.token = tokenValue;
                 resolve(tokenValue);
             }, (error: string): any => {
-                console.error("Error getting access token: " + error)
+                console.error("Error getting access token: " + error),
+                reject(error);
             });
         });
     }

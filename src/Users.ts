@@ -19,113 +19,12 @@ export class Users {
   }
 
 
- //Getting user-status based on mail-settings. E.g. user is in meeting.
-  public userStatus(response, request): void {
-    this.client = this.instance.getClient();
-    if (request.method === "POST") {
-      let body: string;
-
-      request.on("data", (input) => {
-        body += input;
-        if (body.length > 1e6) {
-          request.connection.destroy();
-        }
-
-        let userMail: any[];
-        let userArray: any = JSON.parse(body);
-        let counter: number = 0;
-
-        if (userArray.length === 0) {
-          response.writeHead(200, { "Content-Type": "application/json" });
-          response.end("No data");
-          return;
-        }
-
-        console.log("request batch size: " + userArray.length);
-        userArray.forEach((element) => {
-          let id: any = element["id"];
-          let name: any = element["displayName"];
-          this.client.api("https://graph.microsoft.com/beta/users/" + id + "/mailboxSettings/automaticRepliesSetting?pretty=1")
-            .get((err, res) => {
-              if (err) {
-                console.log(name + " has got no mail account!");
-                ++counter;
-              } else {
-
-                if (res["status"] !== "disabled") {
-                  res.id = id;
-                  userMail.push(res);
-                  this.userStatusArray.push(res);
-                }
-                ++counter;
-              }
-              if (counter === userArray.length) {
-                console.log("Instances: " + userMail.length);
-                console.log("200 OK");
-                response.writeHead(200, { "Content-Type": "application/json" });
-                response.end("200");
-              }
-            });
-        });
-      });
-
-    } else if (request.method === "GET") {
-      console.log("Amount of users with status: " + this.userStatusArray.length);
-      if (this.userStatusArray.length > 0) {
-        let batchResponse: any[];
-        if (this.userStatusArray.length < 100) {
-          console.log("Reached last elements:" + this.userStatusArray.length);
-          response.writeHead(200, { "Content-Type": "application/json" });
-          response.end(JSON.stringify(this.userStatusArray));
-          return;
-
-        } else {
-          let counter: any = this.userStatusArray;
-          for (let element of this.userStatusArray) {
-            batchResponse.push(element);
-            counter.splice(element, 1);
-
-            if (batchResponse.length === 100) {
-              console.log(200);
-              response.writeHead(200, { "Content-Type": "application/json" });
-              response.end(JSON.stringify(batchResponse));
-              batchResponse = [];
-            }
-
-            if (counter.length < 100) {
-              response.writeHead(200, { "Content-Type": "application/json" });
-              response.end(JSON.stringify(counter));
-              return;
-            }
-          }
-        }
-
-      } else {
-        console.log("No data");
-        response.writeHead(200, { "Content-Type": "application/json" });
-        response.end("No data");
-        return;
-      }
-    }
-  }
-
   //Retrieves a list of users from O365
   public users(response, request): void {
     this.client = this.instance.getClient();
 
-    //Post is currently not in use as AD is overwriting post-request regarding user profile update
     if (request.method === "POST") {
-      let userId: any = request.data;
-      this.client.api("/users/" + userId + "/displayName")
-        .patch(
-        { "value": "Test" },
-        (err, res) => {
-          if (err) {
-            console.log(err);
-          } else {
-            console.log("Profile Updated");
-          }
-        });
+      //Post is currently not in use as AD is overwriting post-request regarding user profile update
     } else if (request.method === "GET") {
       this.client
         .api("https://graph.microsoft.com/beta/users?$filter=accountEnabled eq true")
@@ -147,7 +46,7 @@ export class Users {
     }
   }
 
-  // Paging is used when the amount of instances is high. Thus getNextpage is necessary 
+  // Paging is used when the amount of instances is high. Therefore getNextpage is needed 
   public static getNextPage(result: any, response: any, client: any, data: any): void {
     let completeResult: any[] = data;
     completeResult = data.concat(result.value);
@@ -190,7 +89,7 @@ export class Users {
         let image: string = element["image"]
         let bitmap = new Buffer(image, 'base64');
 
-        if (image.length === 0) { 
+        if (image.length === 0) {
           response.end("No image");
           return;
 
@@ -216,6 +115,99 @@ export class Users {
       request(uri).pipe(fs.createWriteStream(filename)).on("close", callback);
     });
   }
+
+
+  //Getting user-status based on mail-settings. E.g. user is in meeting.
+  public userStatus(response, request): void {
+    this.client = this.instance.getClient();
+    if (request.method === "POST") {
+      let body: string;
+
+      request.on("data", (input) => {
+        body += input;
+        if (body.length > 1e6) {
+          request.connection.destroy();
+        }
+
+        let userMail: any[];
+        let userArray: any = JSON.parse(body);
+        let counter: number = 0;
+
+        if (userArray.length === 0) {
+          response.writeHead(204, { "Content-Type": "application/json" });
+          response.end("No data");
+          return;
+        }
+
+        userArray.forEach((element) => {
+          let id: any = element["id"];
+          let name: any = element["displayName"];
+          this.client.api("https://graph.microsoft.com/beta/users/" + id + "/mailboxSettings/automaticRepliesSetting?pretty=1")
+            .get((err, res) => {
+              if (err) {
+                console.log(err);
+                ++counter;
+              } else {
+                if (res["status"] !== "disabled") {
+                  res.id = id;
+                  userMail.push(res);
+                  this.userStatusArray.push(res);
+                }
+                ++counter;
+              }
+
+              if (counter === userArray.length) {
+                console.log("Instances: " + userMail.length);
+                response.writeHead(200, { "Content-Type": "application/json" });
+                response.end("200");
+              }
+            });
+        });
+      });
+
+    } else if (request.method === "GET") {
+      this.getUserStatus(response, request);
+    }
+  }
+
+
+  public getUserStatus(response, request) {
+    if (this.userStatusArray.length > 0) {
+      let batchResponse: any[];
+
+      if (this.userStatusArray.length < 100) {
+        response.writeHead(200, { "Content-Type": "application/json" });
+        response.end(JSON.stringify(this.userStatusArray));
+        return;
+
+      } else {
+        let counter: any = this.userStatusArray;
+        for (let element of this.userStatusArray) {
+          batchResponse.push(element);
+          counter.splice(element, 1);
+
+          if (batchResponse.length === 100) {
+            response.writeHead(200, { "Content-Type": "application/json" });
+            response.end(JSON.stringify(batchResponse));
+            batchResponse = [];
+          }
+
+          if (counter.length < 100) {
+            response.writeHead(200, { "Content-Type": "application/json" });
+            response.end(JSON.stringify(counter));
+            return;
+          }
+        }
+      }
+
+    } else {
+      console.log("No data");
+      response.writeHead(204, { "Content-Type": "application/json" });
+      response.end("No data");
+      return;
+    }
+  }
+
 }
 
 export default new Users();
