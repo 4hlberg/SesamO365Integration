@@ -25,11 +25,11 @@ npm start
 ```
 ### API Endpoints
 
-/users GET -> Retrieves a list of all users in O365
-/groups GET -> Retrieves a list of all groups in O365
-/photo POST -> Updates a user's image given base64 encoded image and O365 user id in the request body
-/status POST -> By posting userId's, the users statuses are retrieved
-/status GET -> The users statuses retrived from the post is returned
+/users GET -> Retrieves a list of all users in O365 <br/>
+/groups GET -> Retrieves a list of all groups in O365<br/>
+/photo POST -> Updates a user's image given base64 encoded image and O365 user id in the request body<br/>
+/status POST -> By posting userId's, the users statuses are retrieved<br/>
+/status GET -> The users statuses retrived from the post is returned<br/>
 
 ### Sesam 
 
