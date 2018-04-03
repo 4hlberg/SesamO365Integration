@@ -22,7 +22,6 @@ class App {
     this.express = express();
     this.middleware();
     this.routes();
-
     this.authentication = new Authenticate();
     this.group = new Groups();
     this.usr = new Users();
