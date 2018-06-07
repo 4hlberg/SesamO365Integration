@@ -43,11 +43,6 @@ class App {
   private routes(): void {
     let router: any = express.Router();
   
-    router.all("/industry", bodyParser.json(), (req, res, next) => {
-      console.log(req.method + " /industry");
-      this.file.updateIndustryList(res, req);
-    });
-
     router.all("/groups", (req, res, next) => {
       console.log(req.method + " /groups");
       this.group.groups(res, req);
@@ -58,19 +53,18 @@ class App {
       this.usr.users(res, req);
     });
 
-    router.all("/status", (req, res, next) => {
+    router.all("/users/status", (req, res, next) => {
       console.log(req.method + " /status");
       this.usr.userStatus(res, req);
     });
 
-    router.all("/photo", (req, res, next) => {
+    router.all("/users/photo", (req, res, next) => {
       console.log(req.method + " /photo");
       this.usr.updateProfilePictureBaseEncoded(res, req);
     });
 
-    router.all("/file", (req, res, next) => {
-      console.log(req.method + " /file");
-      this.file.shareFile(res, req);
+    router.all("/lists", (req, res, next) => {
+      console.log(req.method + " /lists");
     });
 
     this.express.use("/", router);
